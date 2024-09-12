@@ -1,0 +1,28 @@
+﻿.cascade-permissions {
+    padding-right: 10px;
+    color: #39739d;
+    box-shadow: inset 0 1px 0 #f4f8fb;
+    display: inline-block;
+}
+
+.access-button-group {
+    padding: 15px 0;
+    margin-bottom: 25px;
+}
+
+.permission-picker {
+    margin-top: 10px;
+
+    .container {
+        display: flex;
+    }
+
+    .container > *  {
+       flex: 1;
+    }
+
+    .acess-icon {
+        padding: 0 4px;
+    }
+}
+

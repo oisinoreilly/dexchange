@@ -1,0 +1,29 @@
+﻿.column-item {
+    padding: 5px 0;
+    border-bottom: thin solid #EDF1F6;
+    min-height: 50px;
+
+    p {
+        color: #c1c1c1;
+        margin: 0;
+    }
+
+    &.selected {
+        background-color: #E4EFFB;
+        border: thin solid #4A90E2;
+    }
+
+    &.status {
+        &.red {
+            border-left: #d0021b 4px solid;
+        }
+
+        &.amber {
+            border-left: orange 4px solid;
+        }
+
+        &.green {
+            border-left: #7ed321 4px solid;
+        }
+    }
+}

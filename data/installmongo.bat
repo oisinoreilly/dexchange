@@ -1,0 +1,1 @@
+"C:\docHQ\reactTest\vendor\mongodb\3.0.2\64bit\mongod.exe" --config "C:\docHQ\data\mongod.cfg" --install --serviceName "MongoDB"
