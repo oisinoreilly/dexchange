@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DocuSign.eSign.Api;
-using DocuSign.eSign.Model;
-using DocuSign.eSign.Client;
 using Newtonsoft.Json;
 using System.IO;
 using ServiceStack;
 using ServiceStack.Auth;
 using DocumentHQ.CommonConfig;
+using Models.DTO.V1;
+using DocuSign.eSign.Model;
+using DocuSign.eSign.Api;
+using DocuSign.eSign.Client;
 
 namespace Core.Repositories
 {
@@ -100,13 +101,13 @@ namespace Core.Repositories
             envDef.EmailSubject = "DocumentationHQ - Please sign this doc";
 
             // Add a document to the envelope
-            Document doc = new Document();
+            DocuSign.eSign.Model.Document doc = new DocuSign.eSign.Model.Document();
             doc.DocumentBase64 = base64Contents.Replace("data:application/pdf;base64,", string.Empty);
             doc.Name = docName;
             doc.DocumentId = "1";
             doc.FileExtension = "pdf";
 
-            envDef.Documents = new List<Document>();
+            envDef.Documents = new List<DocuSign.eSign.Model.Document>();
             envDef.Documents.Add(doc);
 
             // Add a recipient to sign the documeent
