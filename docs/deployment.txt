@@ -1,0 +1,33 @@
+1) Copy following folder2:
+
+REST:
+reactTest\output\clr
+
+Mongo:
+vendor\mongodb
+data
+
+Web Server:
+reactTest\WebApp\WebApp.AspNetCore\bin\Debug\net6.0
+reactTest\WebApp\WebApp.AspNetCore\wwwroot
+
+2) Install mongo service:
+
+a) Install Visual Studio 2013 runtime
+
+b) Run installmongo.bat:
+
+"C:\Program Files\MongoDB\Server\6.0\bin\mongod.exe" --config "C:\Program Files\MongoDB\Server\6.0\bin\mongod.conf" --install
+
+3) Install Web Service
+
+a) Install .NET 6.0
+
+b) Install cert:
+dotnet dev-certs https
+
+c) Trust cert:
+dotnet dev-certs https --trust
+
+d) Run Web Server:
+C:\DeXchange\webserver>"C:\Program Files (x86)\dotnet\dotnet.exe" dev-certs https --trust
