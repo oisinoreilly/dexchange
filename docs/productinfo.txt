@@ -47,3 +47,10 @@ dotnet dev-certs https --trust
 
 d) Run Web Server:
 C:\DeXchange\webserver>"C:\Program Files (x86)\dotnet\dotnet.exe" dev-certs https --trust
+
+
+
+
+Problem encountered in web client:
+
+https://forums.servicestack.net/t/cannot-set-property-body-of-request-servicestackclient/10988

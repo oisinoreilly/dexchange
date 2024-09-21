@@ -64,12 +64,13 @@ export const actionCreators = {
 
         // Get the client instance
         const client = BackendClientSingleton.getClient();
-       const userInfoPromise = fetch('http://localhost:5001/auth/credentials', {
+
+        // Make the post request using fetch()
+        const userInfoPromise = fetch('http://localhost:5001/auth/credentials', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            credentials: 'include',  // Add this to include cookies or HTTP authentication credentials
             body: JSON.stringify(requestPayload)
         })
         .then(response => {
@@ -78,7 +79,8 @@ export const actionCreators = {
             }
             return response.json();
         })
-        .then((userInfoResponse) => {
+        .then((userInfoResponse: backendTypes.AuthenticateResponse) => {
+            // Ensure userInfoResponse is defined
             if (!userInfoResponse) {
                 throw new Error('No user information returned from the server');
             }
@@ -94,9 +96,8 @@ export const actionCreators = {
         })
         .catch(error => {
             console.error('Error during login:', error);
-            return null;
+            return null;  // Ensure `null` is returned on error
         });
-
 
         // After userInfoPromise is resolved, make another request for user configuration
         const userConfigPromise = userInfoPromise.then(userInfo => {
@@ -108,27 +109,7 @@ export const actionCreators = {
                 UserID: parseInt(userInfo.UserId, 10)
             };
 
-            // Use fetch to request user config instead of ServiceStack client
-            return fetch(`http://localhost:5001/user/config?UserID=${userConfigRequest.UserID}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${client.BearerToken}` // Include Bearer token in headers
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch user config');
-                }
-                return response.json();
-            })
-            .then(userConfig => {
-                return userConfig; // Return the user config data
-            })
-            .catch(error => {
-                console.error('Error fetching user config:', error);
-                return null;  // Ensure `null` is returned on error
-            });
+            return client.get('/user/config', userConfigRequest);
         });
 
         // Handle both promises

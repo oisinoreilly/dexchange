@@ -1,9 +1,6 @@
 {
   "name": "WebappTestserver",
   "version": "0.0.0",
-  "scripts": {
-    "build": "webpack --config webpack.config.js"
-  },
   "dependencies": {
     "@types/history": "^2.0.0",
     "@types/react": "^16.0.31",
@@ -49,7 +46,7 @@
     "redux-thunk": "^2.2.0",
     "sass-loader": "^6.0.6",
     "seamless-immutable": "^7.1.2",
-    "servicestack-client": "0.0.32",
+    "servicestack-client": "0.0.42",
     "style-loader": "^0.13.0",
     "typescript": "^2.2.1",
     "url-loader": "^0.5.7",

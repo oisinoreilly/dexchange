@@ -755,36 +755,39 @@ namespace Core.Repositories
                         // Get documents.
                         IMongoCollection<Document> docColl = _database.GetCollection<Document>(CommonGlobals.DocumentsCollectionName);
 
-
-                        for (int i = 0; i < accountType.BaseDocumentIDs.Count; i++)
+                        if (null != accountType.BaseDocumentIDs)
                         {
-                            DocumentContent content = GetAccountTypeDocumentContents(account.AccountType, accountType.BaseDocumentIDs[i], prefillDocuments);
 
-                            Document doc = new Document();
-                            doc.Versions = new List<DocumentVersion>();
-                            doc.Name = accountType.BaseDocumentNames[i];
-                            doc.Id = ObjectId.GenerateNewId().ToString();
-                            doc.Accounts = new List<string>();
-                            doc.Accounts.Add(account.Id);
-                            doc.Status = new StatusEx()
+                            for (int i = 0; i < accountType.BaseDocumentIDs.Count; i++)
                             {
-                                Status = Status.Pending_e,
-                            };
+                                DocumentContent content = GetAccountTypeDocumentContents(account.AccountType, accountType.BaseDocumentIDs[i], prefillDocuments);
 
-                            // Create document version.
-                            DocumentVersion version = new DocumentVersion();
-                            version.Id = ObjectId.GenerateNewId().ToString();
-                            version.DocumentContentId = content.Id;
-                            doc.Versions.Add(version);
+                                Document doc = new Document();
+                                doc.Versions = new List<DocumentVersion>();
+                                doc.Name = accountType.BaseDocumentNames[i];
+                                doc.Id = ObjectId.GenerateNewId().ToString();
+                                doc.Accounts = new List<string>();
+                                doc.Accounts.Add(account.Id);
+                                doc.Status = new StatusEx()
+                                {
+                                    Status = Status.Pending_e,
+                                };
 
-                            // Add to document collection.
-                            docContentColl.InsertOne(content);
+                                // Create document version.
+                                DocumentVersion version = new DocumentVersion();
+                                version.Id = ObjectId.GenerateNewId().ToString();
+                                version.DocumentContentId = content.Id;
+                                doc.Versions.Add(version);
 
-                            // Add document.
-                            docColl.InsertOne(doc);
+                                // Add to document collection.
+                                docContentColl.InsertOne(content);
 
-                            // Add document to account documents list.
-                            account.Documents.Add(doc.Id);
+                                // Add document.
+                                docColl.InsertOne(doc);
+
+                                // Add document to account documents list.
+                                account.Documents.Add(doc.Id);
+                            }
                         }
                     }
                 }
