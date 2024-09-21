@@ -58,6 +58,30 @@ namespace ServiceStack.SelfHost.Services
             return new DocuSignService(docusignUserName, docuSignPassword, apiKey);
         }
 
+
+        public UserAuth Get(UserConfig request)
+        {
+            // Resolve the UserAuthRepository from the container
+            var userAuthRepo = ResolveService<IUserAuthRepository>();
+
+            // Get the UserAuth object by userID (assuming it's an integer)
+            var userAuth = userAuthRepo.GetUserAuth(request.Id.ToString());
+
+            if (userAuth == null)
+            {
+                throw HttpError.NotFound("User not found");
+            }
+
+            return new UserAuth
+            {
+                Id = userAuth.Id,
+                DisplayName = userAuth.DisplayName,
+                Email = userAuth.Email,
+                UserName = userAuth.UserName
+            };
+
+        }
+
         /// <summary>
         /// GetBanks.
         /// </summary>
@@ -1274,7 +1298,23 @@ namespace ServiceStack.SelfHost.Services
 
         public UserConfig Get(UserConfigGet request)
         {
-            return _repos.GetUserConfig(request.UserID);
+            // Resolve the UserAuthRepository from the container
+            var userAuthRepo = ResolveService<IUserAuthRepository>();
+
+            // Get the UserAuth object by userID (assuming it's an integer)
+            var userAuth = userAuthRepo.GetUserAuth(request.UserID.ToString());
+
+            if (userAuth == null)
+            {
+                throw HttpError.NotFound("User not found");
+            }
+
+            return new UserConfig()
+            {
+                UserId = request.UserID,
+                UserPrivilege = Privilege.SuperAdmin,
+                EntityName = userAuth.UserName
+            };
         }
 
         #endregion

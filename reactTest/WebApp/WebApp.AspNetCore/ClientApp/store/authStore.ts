@@ -53,66 +53,119 @@ interface LocationChangeAction {
 export type KnownAuthAction = ResponseLogInAction | ResponseLogOffAction | RedirectUrlAction | LocationChangeAction | ResponseRegisterAction | RouterAction;
 
 export const actionCreators = {
-    requestLogin: (username: string, password: string): AppThunkAction<KnownAuthAction> => (dispatch, getState) => {
-        //Login to the server
-        var client = BackendClientSingleton.getClient();
-        //TODO: Use the JT tokens fully and just pass them in on the cookie with an empty auth attempt
-        //If our credentials are saved with the server we should be able to auth.
-        let request = new backendTypes.Authenticate();
-        request.provider = "credentials";
-        request.UserName = username;
-        request.Password = password;
-        request.RememberMe = true;
+ requestLogin: (username: string, password: string): AppThunkAction<KnownAuthAction> => (dispatch, getState) => {
+        // Create the request payload
+        const requestPayload = {
+            provider: "credentials",
+            UserName: username,
+            Password: password,
+            RememberMe: true
+        };
 
-        const userInfoPromise = client.post(request).then((userInfoResponse: backendTypes.AuthenticateResponse) => {
-            //Save the auth token.
+        // Get the client instance
+        const client = BackendClientSingleton.getClient();
+       const userInfoPromise = fetch('http://localhost:5001/auth/credentials', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',  // Add this to include cookies or HTTP authentication credentials
+            body: JSON.stringify(requestPayload)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to authenticate');
+            }
+            return response.json();
+        })
+        .then((userInfoResponse) => {
+            if (!userInfoResponse) {
+                throw new Error('No user information returned from the server');
+            }
+
+            // Save the auth token
             BackendClientSingleton.setAuthToken(userInfoResponse.BearerToken);
             sessionStorage.setItem("AuthToken", userInfoResponse.BearerToken);
-            //Also update the client we are using with the new token
+
+            // Update client token
             client.BearerToken = userInfoResponse.BearerToken;
-            //Get the system configuration.
+
             return userInfoResponse;
+        })
+        .catch(error => {
+            console.error('Error during login:', error);
+            return null;
         });
 
-        const userConfigPromise = userInfoPromise.then(function (userInfo) {
-            const userConfigRequest = new backendTypes.UserConfigGet();
-            userConfigRequest.UserID = parseInt(userInfo.UserId);
-            return client.get(userConfigRequest);
+
+        // After userInfoPromise is resolved, make another request for user configuration
+        const userConfigPromise = userInfoPromise.then(userInfo => {
+            if (!userInfo) {
+                throw new Error('UserInfo is null');
+            }
+
+            const userConfigRequest = {
+                UserID: parseInt(userInfo.UserId, 10)
+            };
+
+            // Use fetch to request user config instead of ServiceStack client
+            return fetch(`http://localhost:5001/user/config?UserID=${userConfigRequest.UserID}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${client.BearerToken}` // Include Bearer token in headers
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user config');
+                }
+                return response.json();
+            })
+            .then(userConfig => {
+                return userConfig; // Return the user config data
+            })
+            .catch(error => {
+                console.error('Error fetching user config:', error);
+                return null;  // Ensure `null` is returned on error
+            });
         });
 
-        Promise.all([userInfoPromise, userConfigPromise]).then(function ([userInfo, userConfig]) {
+        // Handle both promises
+        Promise.all([userInfoPromise, userConfigPromise]).then(([userInfo, userConfig]) => {
+            if (!userInfo || !userConfig) {
+                console.error("Failed to retrieve user information or user configuration");
+                return; // Early return if any promise failed
+            }
 
             const { UserPrivilege, UserType } = userConfig;
             const isAdmin = UserPrivilege === "SuperAdmin" || UserPrivilege === "Admin";
 
             if (isAdmin) {
-                //Update the state to reflect the logged in user
                 dispatch({
                     type: 'RESPONSE_LOGIN_ACTION',
-                    username: username,
+                    username,
                     role: "admin",
                     loggedIn: true,
                     displayName: userInfo.DisplayName,
                     userConfig
                 });
                 dispatch(push('/admin'));
-            }
-            else {
+            } else {
                 if (UserType === "Bank") {
                     dispatch({
                         type: 'RESPONSE_LOGIN_ACTION',
-                        username: username,
+                        username,
                         role: "bank",
                         loggedIn: true,
                         displayName: userInfo.DisplayName,
                         userConfig
                     });
                     dispatch(push('/corporates'));
-                }
-                else if (UserType === "Corporate") {
+                } else if (UserType === "Corporate") {
                     dispatch({
                         type: 'RESPONSE_LOGIN_ACTION',
-                        username: username,
+                        username,
                         role: "corporate",
                         loggedIn: true,
                         displayName: userInfo.DisplayName,
@@ -121,6 +174,8 @@ export const actionCreators = {
                     dispatch(push('/banks'));
                 }
             }
+        }).catch(error => {
+            console.error("Failed to handle login or user configuration", error);
         });
     },
     requestLogoff: (): AppThunkAction<KnownAuthAction | RouterAction> => (dispatch, getState) => {

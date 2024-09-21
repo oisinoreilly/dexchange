@@ -160,7 +160,7 @@ export const actionCreators = {
     },
     addDocument: (accountId: string, document: DocumentUi): AppThunkAction<KnownDocumentAction> => (dispatch, getState) => {
 
-        const request = new backendTypes.DocumentCreate();
+       /* const request = new backendTypes.DocumentCreate();
         request.Username = "user";
         request.Document = new backendTypes.Document();
         request.Document.Id = document.id;
@@ -175,7 +175,55 @@ export const actionCreators = {
                 accountId,
                 document
             });
-        });
+        });*/
+
+
+         // Create the request payload object
+        const request = {
+            Username: "user",
+            Document: {
+                Id: document.id,
+                Name: document.title,
+                Status: document.status,
+                Accounts: [accountId],
+            },
+            DocumentContentBase64: document.documentBase64
+        };
+
+        // Prepare the request options for the fetch call
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('AuthToken'), // Assuming you're using token-based auth
+            },
+            body: JSON.stringify(request) // Convert the request payload to a JSON string
+        };
+
+        // Replace this URL with your actual API endpoint
+        const apiUrl = 'http://localhost:5001/api/v1/documents'; // Modify as needed for your backend route
+
+        // Make the POST request using fetch
+        fetch(apiUrl, requestOptions)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to add document');
+                }
+                return; // response.json(); // Parse the response as JSON
+            })
+            .then(
+                // Dispatch the action to update the state
+                dispatch({
+                    type: 'ADD_DOCUMENT',
+                    accountId,
+                    document
+                );
+            })
+            .catch(error => {
+                console.error('Error adding document:', error);
+            });
+
+
     },
     deleteDocument: (id: string): AppThunkAction<KnownDocumentAction> => (dispatch, getState) => {
         const request = new backendTypes.DocumentDelete();

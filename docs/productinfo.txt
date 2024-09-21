@@ -2,7 +2,48 @@ Email tony@thedexchange.com
 
 PW: DaBohs99!
 
+Ec2:
+IP Address: 63.32.159.120
+DNS: ec2-63-32-159-120.eu-west-1.compute.amazonaws.com
 
 EC2 Instantance user: Administrator:
 
 Password: GRkX=Jv?2bm9v;3(Z-%?NPhjD8o$1aU%
+
+full server URL: https://ec2-63-32-159-120.eu-west-1.compute.amazonaws.com:5003
+
+Deployment:
+
+1) Copy following folder2:
+
+REST:
+reactTest\output\clr
+
+Mongo:
+vendor\mongodb
+data
+
+Web Server:
+reactTest\WebApp\WebApp.AspNetCore\bin\Debug\net6.0
+reactTest\WebApp\WebApp.AspNetCore\wwwroot
+
+2) Install mongo service:
+
+a) Install Visual Studio 2013 runtime
+
+b) Run installmongo.bat:
+
+"C:\Program Files\MongoDB\Server\6.0\bin\mongod.exe" --config "C:\Program Files\MongoDB\Server\6.0\bin\mongod.conf" --install
+
+3) Install Web Service
+
+a) Install .NET 6.0
+
+b) Install cert:
+dotnet dev-certs https
+
+c) Trust cert:
+dotnet dev-certs https --trust
+
+d) Run Web Server:
+C:\DeXchange\webserver>"C:\Program Files (x86)\dotnet\dotnet.exe" dev-certs https --trust

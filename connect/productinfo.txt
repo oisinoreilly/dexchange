@@ -2,7 +2,13 @@ Email tony@thedexchange.com
 
 PW: DaBohs99!
 
+Public IP:
+http://63.32.159.120:5002
 
 EC2 Instantance user: Administrator:
 
-Password: GRkX=Jv?2bm9v;3(Z-%?NPhjD8o$1aU%
+Password:pmCwZj$ja?fIQYOn6dHjvbHM8VCGqg5i
+
+
+
+NOrth America pw GRkX=Jv?2bm9v;3(Z-%?NPhjD8o$1aU%

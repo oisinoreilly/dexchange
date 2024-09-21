@@ -13,6 +13,7 @@ using ServiceStack.Authentication.MongoDb;
 using Core.Contracts;
 using Core.Repositories;
 using MongoDB.Driver;
+using static System.Net.WebRequestMethods;
 
 namespace ServiceStack.SelfHost
 {
@@ -111,9 +112,16 @@ namespace ServiceStack.SelfHost
                                 allowOriginWhitelist: new[] 
                                 {
                                     "http://localhost:5000",
-                                    "http://*:5000",
-                                    "http://*:49361",
-                                    "http://ec2-54-202-32-215.us-west-2.compute.amazonaws.com:5000" }));
+                                    "http://localhost:5001",
+                                    "http://*:5001",
+                                    "http://localhost:49361",
+                                    "http://localhost:5002",
+                                    "http://*:5002",
+                                    "https://localhost:5003",
+                                    "http://ec2-35-153-177-82.compute-1.amazonaws.com:5002",
+                                    "https://ec2-35-153-177-82.compute-1.amazonaws.com:5003",
+                                    "https://ec2-63-32-159-120.eu-west-1.compute.amazonaws.com:5003"
+                                }));
 
                 Plugins.Add(new ServerEventsFeature());
 

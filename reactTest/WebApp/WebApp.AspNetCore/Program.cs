@@ -14,7 +14,7 @@ namespace WebappTestserver
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
-                //.UseUrls("http://*:5000") //UNCOMMENT WHEN PUSHING TO CLOUD //TODO: USE FOR RELEASE UNTIL WE GET A CONFIG WORKING    
+                .UseUrls("http://*:5002", "https://*:5003") //UNCOMMENT WHEN PUSHING TO CLOUD //TODO: USE FOR RELEASE UNTIL WE GET A CONFIG WORKING    
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()

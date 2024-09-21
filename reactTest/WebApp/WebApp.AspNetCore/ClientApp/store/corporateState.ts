@@ -88,7 +88,6 @@ export type KnownCorporateActions =
 
 export const actionCreators = {
     addCorporate: (corporate: CorporateUi): AppThunkAction<KnownCorporateActions> => (dispatch, getState) => {
-
         const request = new backendTypes.CorporateCreate();
         request.Corporate = new backendTypes.Corporate();
         request.Corporate.Detail = new backendTypes.CorporateDetail();
@@ -97,9 +96,45 @@ export const actionCreators = {
         request.Corporate.Icon = corporate.icon;
         request.Corporate.Accounts = [];
         request.Corporate.ParentID = corporate.parentId;
+        var body = JSON.stringify(request);
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', // Make sure server expects JSON
+                'Authorization': 'Bearer ' + localStorage.getItem('AuthToken'), // Example if token is stored in local storage
+            },
+            body: body // Convert the payload to JSON string
+        };
+
+        // Replace the URL with your actual API endpoint
+        fetch('http://localhost:5001/api/v1/corporates', requestOptions)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to create corporate');
+                }
+                return response.json();
+            })
+            .then(responseData => {
+                dispatch({ type: 'ADD_CORPORATE_RESPONSE', corporate: corporate });
+            })
+            .catch(error => {
+                console.error('Error creating corporate:', error);
+            });
+
+
+
+        /*const request = new backendTypes.CorporateCreate();
+        request.Corporate = new backendTypes.Corporate();
+        request.Corporate.Detail = new backendTypes.CorporateDetail();
+        request.Corporate.Detail.Name = corporate.title;
+        request.Corporate.Id = corporate.id.toString();
+        request.Corporate.Icon = corporate.icon;
+        request.Corporate.Accounts = [];
+        request.Corporate.ParentID = corporate.parentId;
         BackendClientSingleton.getClient().post(request).then(response => {
-            dispatch({ type: 'ADD_CORPORATE_RESPONSE', corporate: corporate });
-        });
+            dispatch({ type: 'ADD_CORPORATE_RESPONSE', corporate: corporate });*/
+        //});
     },
     deleteCorporate: (corporateId: string): AppThunkAction<KnownCorporateActions> => (dispatch, getState) => {
 

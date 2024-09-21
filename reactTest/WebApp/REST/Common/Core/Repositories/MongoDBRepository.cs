@@ -1147,7 +1147,7 @@ namespace Core.Repositories
             List<Account> accounts = accountColl.Find(filterdef).ToList();
             if (accounts.Count == 0)
             {
-                if (accountID.CompareTo(CommonGlobals.GlobalIdentifier) == 0)
+                if (!string.IsNullOrEmpty(accountID) && accountID.CompareTo(CommonGlobals.GlobalIdentifier) == 0)
                 {
                     // global account.
                     bGlobal = true;
@@ -1229,7 +1229,23 @@ namespace Core.Repositories
             else
             {
                 // This is a template document. We should extract fields from document and store in Mongo.
-                byte[] bytes = System.Convert.FromBase64String(documentContent);
+               string base64Marker = "data:application/pdf;base64,";
+                    byte[] bytes = null;
+
+
+                try
+                {
+                    bytes = System.Convert.FromBase64String(documentContent);
+                }
+                catch (Exception ex)
+                {
+                    // Remove marker and try again.
+                    if (documentContent.StartsWith(base64Marker))
+                    {
+                        documentContent = documentContent.Substring(base64Marker.Length);
+                    }
+                    bytes = System.Convert.FromBase64String(documentContent);
+                }
 
                 using (MemoryStream stream = new MemoryStream(bytes))
                 {
