@@ -98,7 +98,7 @@ namespace Core.Repositories
         private EnvelopeDefinition CreateEvelopeDefinition(string base64Contents, string accountId, string docName)
         {
             EnvelopeDefinition envDef = new EnvelopeDefinition();
-            envDef.EmailSubject = "DocumentationHQ - Please sign this doc";
+            envDef.EmailSubject = "DeXchange - Please sign this doc";
 
             // Add a document to the envelope
             DocuSign.eSign.Model.Document doc = new DocuSign.eSign.Model.Document();

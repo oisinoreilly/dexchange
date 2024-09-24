@@ -29,8 +29,8 @@ namespace DocumentHQ.CommonConfig
         public static string UserIdFieldName = "UserId";
         public static string ParentID = "ParentID";
 
-        public static string serverUrl = "http://localhost";
-        //public static string serverUrl = "http://ec2-54-202-32-215.us-west-2.compute.amazonaws.com";
+        //public static string serverUrl = "http://localhost";
+        public static string serverUrl = "http://ec2-63-32-159-120.eu-west-1.compute.amazonaws.com";
 
     }
 }

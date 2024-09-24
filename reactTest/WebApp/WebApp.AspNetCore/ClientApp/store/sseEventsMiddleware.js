@@ -2,9 +2,9 @@
 require('eventsource-polyfill');
 import * as backendTypes from '../backendTypes';
 import { JsonServiceClient, ServerEventsClient } from 'servicestack-client';
-const backendServerUrl = "http://localhost:5001";
+//const backendServerUrl = "http://localhost:5001";
 //TODO: UNCOMMENT FOR DEPLOYMENT
-//const backendServerUrl = "http://ec2-54-202-32-215.us-west-2.compute.amazonaws.com:5001";
+const backendServerUrl = "http://ec2-63-32-159-120.eu-west-1.compute.amazonaws.com:5001";
 const client = new JsonServiceClient(backendServerUrl);
 const sseClient = new ServerEventsClient(backendServerUrl, ['*'], {
     handlers: {

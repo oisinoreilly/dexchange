@@ -13,7 +13,7 @@ export class NavMenu extends React.Component {
                         <span className='icon-bar'></span>
                     </button>
                     <Image src="/logo-gold.png" responsive/>
-                    <Link to={'/'}><span className='navbar-brand' style={{ marginLeft: '-124px' }}>DocumentationHQ</span></Link>
+                    <Link to={'/'}><span className='navbar-brand' style={{ marginLeft: '-124px' }}>DeXchange</span></Link>
                 </div>
                 <div className='clearfix'></div>
                 <div className='navbar-collapse collapse'>

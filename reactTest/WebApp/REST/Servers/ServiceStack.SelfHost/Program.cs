@@ -118,8 +118,10 @@ namespace ServiceStack.SelfHost
                                     "http://localhost:5002",
                                     "http://*:5002",
                                     "https://localhost:5003",
-                                    "http://ec2-35-153-177-82.compute-1.amazonaws.com:5002",
-                                    "https://ec2-35-153-177-82.compute-1.amazonaws.com:5003",
+                                    "http://63.32.159.120:5001",
+                                    "http://63.32.159.120:5002",
+                                    "https://63.32.159.120:5003",
+                                    "http://ec2-63-32-159-120.eu-west-1.compute.amazonaws.com:5002",
                                     "https://ec2-63-32-159-120.eu-west-1.compute.amazonaws.com:5003"
                                 }));
 

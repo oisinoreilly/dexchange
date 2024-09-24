@@ -54,7 +54,7 @@ export class Layout extends React.Component<LayoutProps, null> {
             <Navbar className="__main_menu_navbar" collapseOnSelect>
                 <Navbar.Header>
                     <Navbar.Brand className="__main_menu_logo">
-                        <a href="/"><Image src="/dist/logo-gold.png" responsive /> DocumentationHQ
+                        <a href="/"><Image src="/dist/logo-gold.png" responsive /> DeXchange
                             </a>
                     </Navbar.Brand>
                     <Navbar.Toggle />

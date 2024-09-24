@@ -30,5 +30,5 @@ export class BackendClientSingleton {
     }
 }
 BackendClientSingleton.bearerToken = "";
-BackendClientSingleton.backendServerUrl = "http://localhost:5001"; //UNCOMMENT FOR DEV
+BackendClientSingleton.backendServerUrl = "http://63.32.159.120:5001"; //UNCOMMENT FOR DEV
 //# sourceMappingURL=BackendClientSingleton.js.map

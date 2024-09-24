@@ -52,7 +52,7 @@ namespace ServiceStack.SelfHost.Services
         private IDocuSignService GetDocuSignService()
         {
             //TODO: store values in config
-            string docusignUserName = "tony@documentationhq.com";
+            string docusignUserName = "tony@thedexchange.com";
             string docuSignPassword = "dochq99";
             string apiKey = "87fc7a4b-d26f-4247-a689-bfe258b56880";
             return new DocuSignService(docusignUserName, docuSignPassword, apiKey);
