@@ -1293,28 +1293,19 @@ namespace ServiceStack.SelfHost.Services
 
         public void Delete(UserInfoDelete request)
         {
-            _repos.DeleteUser(request.UserID);
+            _repos.DeleteUser(request.UserToDelete);
         }
 
         public UserConfig Get(UserConfigGet request)
         {
-            // Resolve the UserAuthRepository from the container
-            var userAuthRepo = ResolveService<IUserAuthRepository>();
-
-            // Get the UserAuth object by userID (assuming it's an integer)
-            var userAuth = userAuthRepo.GetUserAuth(request.UserID.ToString());
-
-            if (userAuth == null)
+            var userConfig = _repos.GetUserConfig(request.UserID);
+            if ((userConfig.EntityName.ToUpper().CompareTo("ADMIN") == 0) || (userConfig.EntityName.ToUpper().CompareTo("GROUPWIDE") == 0))
             {
-                throw HttpError.NotFound("User not found");
+                userConfig.UserPrivilege = Privilege.SuperAdmin;
             }
+               
 
-            return new UserConfig()
-            {
-                UserId = request.UserID,
-                UserPrivilege = Privilege.SuperAdmin,
-                EntityName = userAuth.UserName
-            };
+            return userConfig;
         }
 
         #endregion

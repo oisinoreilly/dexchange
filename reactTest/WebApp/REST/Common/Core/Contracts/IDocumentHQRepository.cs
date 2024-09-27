@@ -116,7 +116,7 @@ namespace Core.Contracts
         UserConfig GetUserConfig(int userID);
         void CreateUser(UserAuth userToCreate, string password, UserConfig config);
         void UpdateUser(UserAuth user, UserConfig detail);
-        void DeleteUser(int userID);
+        void DeleteUser(string userName);
 
         // Group methods.
         List<Group> GetGroupsList();

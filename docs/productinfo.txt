@@ -6,7 +6,7 @@ Ec2:
 IP Address: 63.32.159.120
 DNS: ec2-63-32-159-120.eu-west-1.compute.amazonaws.com
 
-EC2 Instantance user: Administrator:
+EC2 Instance user: Administrator:
 
 Password: GRkX=Jv?2bm9v;3(Z-%?NPhjD8o$1aU%
 

@@ -44,7 +44,7 @@ namespace Models.DTO.V1
     public class UserInfoDelete : IReturnVoid
     {
         [ProtoMember(1)]
-        public int UserID{ get; set; }
+        public string UserToDelete { get; set; }
     }
 
     [Route("/api/v1/user/info", "GET")]

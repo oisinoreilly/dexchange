@@ -2432,6 +2432,32 @@ namespace Core.Repositories
                 config.Id = ObjectId.GenerateNewId().ToString();
             }
 
+            // Check if this is a bank or corporate user.
+            Bank testbank = null;
+
+            try
+            {
+                EventLogger.LogMessage("User " + userToCreate.UserName + ", Checking user's bank, entity: " + config.EntityDisplayName + ", entity id: " + config.EntityID, System.Diagnostics.EventLogEntryType.Information);
+                testbank = GetBank(config.EntityID);
+                config.UserType = Entity.Bank;
+            }
+            catch (Exception ex)
+            {
+                try
+                {
+                    EventLogger.LogMessage("User " + userToCreate.UserName + ",Checking user's corporate", System.Diagnostics.EventLogEntryType.Information);
+
+                    var testcorp = GetCorporate(config.EntityID);
+                    config.UserType = Entity.Corporate;
+                }
+                catch (Exception)
+                {
+                    EventLogger.LogMessage("User " + userToCreate.UserName + ",invalid entity", System.Diagnostics.EventLogEntryType.Information);
+
+                    throw new Exception("Invalid entity");
+                }
+            }
+           
             // Check to see if this is a duplicate user. Reject request if it is.
             // Make sure user is not already in collection.
             var matching = userConfig.AsQueryable().ToList();
@@ -2513,8 +2539,26 @@ namespace Core.Repositories
         /// Delete user by ID.
         /// </summary>
         /// <param name="userID"></param>
-        public void DeleteUser(int userID)
+        public void DeleteUser(string userName)
         {
+            if (string.IsNullOrEmpty(userName))
+                throw new Exception("User name is not set in delete request.");
+
+            IUserAuth user = null;
+            try
+            {
+                user = GetUserByName(userName);
+            }
+            catch (Exception)
+            {
+                throw new Exception("User with name " + userName + " not found, user can not be added to group.");
+            }
+
+
+
+            // Get ID for user.
+            int userID = user.Id;
+
             IMongoCollection<UserConfig> coll = _database.GetCollection<UserConfig>(CommonGlobals.UserConfigCollectionName);
 
             // Make sure name is specified.
