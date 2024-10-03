@@ -9,7 +9,7 @@ namespace Models.DTO.V1
 
     [Route("/api/v1/accounttypes", "GET")]
     [ProtoContract]
-    [Authenticate]
+    ////[Authenticate]
     public class AccountTypeReadAll : IReturn<List<AccountType>>
     {
         [ProtoMember(1)]
@@ -19,7 +19,7 @@ namespace Models.DTO.V1
     
     [Route("/api/v1/accounttypes/list", "GET")]
     [ProtoContract]
-    [Authenticate]
+    //[Authenticate]
     public class AccountTypeList : IReturn<List<string>>
     {
         [ProtoMember(1)]
@@ -29,7 +29,7 @@ namespace Models.DTO.V1
 
     [Route("/api/v1/accounttypes/listbyid", "GET")]
     [ProtoContract]
-    [Authenticate]
+    //[Authenticate]
     public class AccountTypeListByID : IReturn<List<string>>
     {
         [ProtoMember(1)]
@@ -39,7 +39,7 @@ namespace Models.DTO.V1
 
     [Route("/api/v1/accounttypes", "POST")]
     [ProtoContract]
-    [Authenticate]
+    ////[Authenticate]
     public class AccountTypeCreate : IReturnVoid
     {
         [ProtoMember(1)]
@@ -49,7 +49,7 @@ namespace Models.DTO.V1
 
     [Route("/api/v1/accounttype", "GET")]
     [ProtoContract]
-    [Authenticate]
+    ////[Authenticate]
     public class AccountTypeRead : IReturn<AccountType>
     {
         public string ID { get; set; }
@@ -57,7 +57,7 @@ namespace Models.DTO.V1
 
     [Route("/api/v1/accounttype/name", "GET")]
     [ProtoContract]
-    [Authenticate]
+    //[Authenticate]
     public class AccountTypeReadByName : IReturn<AccountType>
     {
         public string Name { get; set; }
@@ -65,7 +65,7 @@ namespace Models.DTO.V1
 
     [Route("/api/v1/accounttype/documents", "GET")]
     [ProtoContract]
-    [Authenticate]
+    //[Authenticate]
     public class AccountTypeDocumentContents : IReturn<DocumentContent>
     {
         public string AccountTypeID { get; set; }
@@ -74,7 +74,7 @@ namespace Models.DTO.V1
     }
 
     [Route("/api/v1/accounttype", "PUT")]
-    [Authenticate]
+    //[Authenticate]
     public class AccountTypeUpdate : IReturnVoid
     {
         [ProtoMember(1)]
@@ -85,7 +85,7 @@ namespace Models.DTO.V1
     }
 
     [Route("/api/v1/accounttype", "DELETE")]
-    [Authenticate]
+    //[Authenticate]
     public class AccountTypeDelete : IReturnVoid
     {
         public string ID { get; set; }

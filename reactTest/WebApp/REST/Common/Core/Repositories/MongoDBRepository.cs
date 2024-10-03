@@ -712,7 +712,7 @@ namespace Core.Repositories
                 throw new Exception("Bank with ID " + account.ParentID + " not found.");
 
             // Check write access to bank (required for creating an account).
-            PerformSecurityCheck(Access.Write, bank.Id, Resource.Bank, bank.Id);
+            //PerformSecurityCheck(Access.Write, bank.Id, Resource.Bank, bank.Id);
 
             if (null == account.Status)
             {
@@ -1417,41 +1417,83 @@ namespace Core.Repositories
 
             // Get document reference.
             Document document = documentColl.Find(filter).FirstOrDefault();
-            if (null == document)
-                throw new Exception("Document with ID " + documentID + " not found.");
-
-            List<string> accountIDs = document.Accounts;
-            string corporateID = null;
-            try
+            if (null != document)
             {
-                corporateID = GetCorporateIDFromAccountID(accountIDs[0]);
-            }
-            catch (Exception) { }
+                //  throw new Exception("Document with ID " + documentID + " not found.");
 
-            // Perform update security check for parent account.
-            PerformSecurityCheck(Access.Delete, document.Id, Resource.Document, corporateID);
+                List<string> accountIDs = document.Accounts;
+                string corporateID = null;
 
-            // Iterate through accounts and remove this document from them.
-            IMongoCollection<Account> accountColl = _database.GetCollection<Account>(CommonGlobals.AccountsCollectionName);
-            foreach (string accountID in accountIDs)
-            {
-                var filterdef = Builders<Account>.Filter.Eq(CommonGlobals.IdFieldName, accountID);
-                Account account = accountColl.Find(filterdef).First();
-
-                // remove document from Documents list for each account.
-                var updateOperation = Builders<Account>.Update.Pull<string>("Documents", documentID);
-                var result = accountColl.UpdateOneAsync(filterdef, updateOperation);
-
-
-                //Thow exception if we have a problem.
-                if (null != result.Exception)
+                if (null != accountIDs && accountIDs.Count > 0)
                 {
-                    if (null != result.Exception.InnerException)
-                        throw new Exception("Unable to Update account: " + result.Exception.InnerException.ToString());
-                    else
-                        throw new Exception("Unable to Update account");
+                    try
+                    {
+                        corporateID = GetCorporateIDFromAccountID(accountIDs[0]);
+                    }
+                    catch (Exception) { }
+
+                    // Perform update security check for parent account.
+                    PerformSecurityCheck(Access.Delete, document.Id, Resource.Document, corporateID);
+
+                    // Iterate through accounts and remove this document from them.
+                    IMongoCollection<Account> accountColl = _database.GetCollection<Account>(CommonGlobals.AccountsCollectionName);
+                    foreach (string accountID in accountIDs)
+                    {
+                        var filterdef = Builders<Account>.Filter.Eq(CommonGlobals.IdFieldName, accountID);
+                        Account account = accountColl.Find(filterdef).First();
+
+                        // remove document from Documents list for each account.
+                        var updateOperation = Builders<Account>.Update.Pull<string>("Documents", documentID);
+                        var result = accountColl.UpdateOneAsync(filterdef, updateOperation);
+
+                        //Thow exception if we have a problem.
+                        if (null != result.Exception)
+                        {
+                            if (null != result.Exception.InnerException)
+                                throw new Exception("Unable to Update account: " + result.Exception.InnerException.ToString());
+                            else
+                                throw new Exception("Unable to Update account");
+                        }
+                    }
+
+
                 }
             }
+
+            var accountTypes = GetAccountTypes("");
+            IMongoCollection<AccountType> accountTypecoll = _database.GetCollection<AccountType>(CommonGlobals.AccountTypesCollectionName);
+            foreach (var accountType in accountTypes)
+            {
+                if (null == accountType.BaseDocumentIDs)
+                    continue;
+                int indexToRemove = -1;
+                for (int i=0;i<accountType.BaseDocumentIDs.Count;i++)
+                {
+                    if (0 == documentID.CompareTo(accountType.BaseDocumentIDs[i]))
+                    {
+                        indexToRemove = i;
+                    }
+
+                }
+
+                if (indexToRemove != -1)
+                {
+                    // remove document version from Document.
+                    var docIDfilter = Builders<AccountType>.Filter.Eq("BaseDocumentIDs", documentID);
+                    var deleteOperation = Builders<AccountType>.Update.Pull<string>("BaseDocumentIDs", documentID);
+                    var result = accountTypecoll.UpdateOneAsync(docIDfilter, deleteOperation);
+
+                    if (null != document)
+                    {
+                        // remove document version from Document.
+                        docIDfilter = Builders<AccountType>.Filter.Eq("BaseDocumentNames", document.Name);
+                        deleteOperation = Builders<AccountType>.Update.Pull<string>("BaseDocumentNames", document.Name);
+                        result = accountTypecoll.UpdateOneAsync(docIDfilter, deleteOperation);
+                    }
+                }
+
+            }
+
 
             // Perform account deletion.
             documentColl.DeleteOne(filter);
@@ -1669,6 +1711,18 @@ namespace Core.Repositories
         public List<AccountType> GetAccountTypes(string bankID)
         {
             IMongoCollection<AccountType> coll = _database.GetCollection<AccountType>(CommonGlobals.AccountTypesCollectionName);
+
+            if (string.IsNullOrEmpty(bankID))
+            {
+                // Fetch all documents in the collection
+                return coll.Find(_ => true).ToList();
+            }
+            else
+            {
+                // Only return "Approved" or "Rejected" notifications.
+                return coll.Find(i => (i.BankID == bankID)).ToList();
+
+            }
 
             // Only return "Approved" or "Rejected" notifications.
             return coll.Find(i => (i.BankID == bankID)).ToList();

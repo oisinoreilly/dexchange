@@ -18,6 +18,7 @@ interface IUserState {
     showNewUserModal: boolean;
     user: UserAuth;
     userPrivilege: Privilege;
+    entityType: string;
     userConfig: UserConfig;
     Password: string;
     validationState: Map<string, ValidationStatus>;
@@ -31,11 +32,15 @@ class Users extends React.Component<ReduxProps, IUserState> {
             showNewUserModal: false,
             showDeleteSelectedModal: false,
             user: new UserAuth(),
-            userPrivilege: null,
+            entityType:'Bank',
+            userPrivilege: 'User',
             userConfig: null,
             validationState: new Map<string, ValidationStatus>(),
             Password: ""
         }
+
+        this.handleEntityTypeChange = this.handleEntityTypeChange.bind(this);
+
     }
 
     componentWillMount() {
@@ -136,6 +141,13 @@ class Users extends React.Component<ReduxProps, IUserState> {
         });
     };
 
+        ///Process any changes to the bank name from the modal dialog
+     handleEntityTypeChange = function (e) {
+        this.setState({
+            entityType: e.target.value
+        });
+    };
+
     modalAddUserOpen = () => {
         this.setState({ showNewUserModal: true });
     };
@@ -174,6 +186,8 @@ class Users extends React.Component<ReduxProps, IUserState> {
         )
     }
 
+ 
+
     entityToConfig(entity){
         const config = {
             EntityDisplayName: entity.title,
@@ -185,6 +199,13 @@ class Users extends React.Component<ReduxProps, IUserState> {
     }
 
     public render() {
+
+      const entityTypes = [
+            'Bank',
+            'Corporate',
+        ];
+
+        const entTypes = entityTypes.map((entType) => <option key={entType} value={entType}>{entType}</option>); 
         const deleteSelectedUserModal =
             <Modal show={this.state.showDeleteSelectedModal} onHide={this.closeModalsAndClearUser}>
                 <Modal.Header closeButton>
@@ -233,6 +254,29 @@ class Users extends React.Component<ReduxProps, IUserState> {
             </FormControl>
         </FormGroup>
 
+          //list of banks and corps so we can set up admin users
+        const banksForm =  <FormGroup controlId="formBankType">
+            <ControlLabel>Select a Bank</ControlLabel>
+            <FormControl componentClass="select" placeholder="Choose Type"
+                onChange={(e) => this.handleEntityChange(e, banks)}>
+                <option value="">Please select an option</option>
+                {banks.map(userConfig =>
+                    <option value={userConfig.EntityID}>{userConfig.EntityName}</option>)}
+            </FormControl>
+        </FormGroup>
+
+           //list of banks and corps so we can set up admin users
+        const corporatesForm =  <FormGroup controlId="formCorporateType">
+            <ControlLabel>Select a Corporate</ControlLabel>
+            <FormControl componentClass="select" placeholder="Choose Type"
+                onChange={(e) => this.handleEntityChange(e, corporates)}>
+                <option value="">Please select an option</option>
+                {corporates.map(userConfig =>
+                    <option value={userConfig.EntityID}>{userConfig.EntityName}</option>)}
+            </FormControl>
+        </FormGroup>
+
+
         const modal = <Modal show={this.state.showEditUserModal || this.state.showNewUserModal} onHide={this.closeModalsAndClearUser} >
             <Modal.Header closeButton>
                 {this.state.showEditUserModal ? editLabel : addLabel}
@@ -242,28 +286,36 @@ class Users extends React.Component<ReduxProps, IUserState> {
                     {textFields}
                     {this.state.showNewUserModal && <FormGroup controlId="passwordInput" validationState={this.state.validationState.get('Password')}>
                         <ControlLabel>Password</ControlLabel>
-                        <FormControl type="password" name='Password' value={this.state.Password} placeholder="Enter Password" onChange={this.handleInputChange} />
+                        <FormControl type="password" name='Password' value={this.state.Password} placeholder="Enter Password" onChange={this.handleInputChange}/>
                         <FormControl.Feedback />
+                       
                     </FormGroup>}
+
+                     {!this.state.showEditUserModal && (this.props.auth.userConfig.UserPrivilege === 'Admin' ||  this.props.auth.userConfig.UserPrivilege === 'SuperAdmin') && 
+                     <FormGroup controlId="formControlsSelectEntityType">
+                        <ControlLabel>Entity Type</ControlLabel>
+                        <FormControl componentClass="select" placeholder="Choose Type" onChange={this.handleEntityTypeChange}>
+                            {entTypes}
+                        </FormControl>
+                    </FormGroup>}
+
+                       
+                    {this.props.auth.userConfig.UserPrivilege === 'SuperAdmin' && this.state.entityType === 'Bank' && !this.state.showEditUserModal && banksForm}
+                    {this.props.auth.userConfig.UserPrivilege === 'SuperAdmin' && this.state.entityType != 'Bank' && !this.state.showEditUserModal && corporatesForm}
+  
+          
                     <FormGroup>
-                        <ControlLabel>Select User Type  </ControlLabel>
-                        <Radio onChange={this.handleInputChange}
-                            name="userPrivilege"
-                            value='User'
-                            checked={this.state.userPrivilege === 'User'}
-                            inline>
+                        <ControlLabel>User Type:  </ControlLabel>
+                        <Radio onChange={this.handleInputChange} name="userPrivilege" value='User' checked={this.state.userPrivilege === 'User'} inline>
                             Standard 
                         </Radio>
-                        <Radio onChange={this.handleInputChange}
-                            name="userPrivilege"
-                            value='Admin'
-                            checked={this.state.userPrivilege === 'Admin'}
-                            inline>
+                        <Radio onChange={this.handleInputChange} name="userPrivilege" value='Admin' checked={this.state.userPrivilege === 'Admin'} inline>
                             Admin
                         </Radio>
                     </FormGroup>
                     {/*if SuperAdmin allow use to create user for any entity. Need so we can create admins for new banks/corps*/}
-                    {this.props.auth.userConfig.UserPrivilege === 'SuperAdmin' && banksAndCorps}
+                 
+
                 </form>
             </Modal.Body>
             <Modal.Footer>

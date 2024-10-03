@@ -328,33 +328,26 @@ namespace AccountConfig
 
                 string accounttypeid = accounttype.Id;
                 List<string> docs = accounttype.BaseDocumentNames;
-                var names = new List<string>();
+                List<string> ids = accounttype.BaseDocumentIDs;
+               // var names = new List<string>();
                 if (null != docs)
                 {
 
                     if (treenode.Nodes.Count == 0)
                     {
-                        foreach (var docName in docs)
+                        for (int i=0;i<docs.Count;i++)
                         {
-                            names.Add(docName);
-                            TreeNode node = treenode.Nodes.Add(docName, docName, IMAGE_INDEX_DOCUMENT, IMAGE_INDEX_DOCUMENT);
-                            node.Tag = docName;
+                      //      names.Add(docs[i]);
+                            TreeNode node = treenode.Nodes.Add(docs[i], docs[i], IMAGE_INDEX_DOCUMENT, IMAGE_INDEX_DOCUMENT);
+                            node.Tag = ids[i];
                         }
                     }
-                    else
-                    {
-                        // already added, let's grab objects from the tree.
-                        foreach (TreeNode node in treenode.Nodes)
-                        {
-                            var docname = node.Tag as string;
-                            names.Add(docname);
-                        }
-                    }
+                   
 
                 }
 
                 // Populate list view with names.
-                FillChildren(names, IMAGE_INDEX_DOCUMENT);
+                FillChildren(docs, IMAGE_INDEX_DOCUMENT);
             }
             catch (Exception ex)
             {
@@ -374,7 +367,7 @@ namespace AccountConfig
 
             listView1.Columns.Clear();
             listView1.Columns.Add("Name", "Name");
-            for (int i = 0; i < names.Count; i++)
+            for (int i = 0; (null != names) && i < names.Count; i++)
             {
                 ListViewItem newitem = new ListViewItem(names[i]);
                 newitem.ImageIndex = imageIndex;
@@ -494,7 +487,7 @@ namespace AccountConfig
                     UpdateAccountType(newDocument.Id, newDocument.Name, selectedAccountType.Name);
 
                     TreeNode newnode = treeView1.SelectedNode.Nodes.Add(newDocument.Name, newDocument.Name, IMAGE_INDEX_DOCUMENT, IMAGE_INDEX_DOCUMENT);
-                    newnode.Tag = newDocument;
+                    newnode.Tag = newDocument.Id;
                 }
                 catch (Exception ex)
                 {
@@ -503,6 +496,32 @@ namespace AccountConfig
                 }
             }
         }
+
+
+        private void deleteDocumentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Get the selected bank
+            var selectedDocument = treeView1.SelectedNode.Tag as string;
+            if (selectedDocument == null)
+            {
+                MessageBox.Show("No document selected.");
+                return;
+            }
+            try
+            {
+                DeleteDocument(selectedDocument);
+                 
+                treeView1.SelectedNode.Parent.Nodes.Remove(treeView1.SelectedNode);
+                 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unable to delete Docment: " + ex.Message, "DocumentHQ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+          
+        }
+
 
         private Document CreateDocument(string name, string base64Content, string id)
         {
@@ -516,6 +535,18 @@ namespace AccountConfig
 
             m_restManager.RESTHandle.Post(documentCreate);
             return newDocument;
+        }
+
+        private void DeleteDocument(string id)
+        {
+            //Create a doc to represent this and associate with the account type
+            DocumentDelete documentDelete = new DocumentDelete
+            {
+                 ID = id
+            };
+
+            m_restManager.RESTHandle.Delete(documentDelete);
+        
         }
 
         private void UpdateAccountType(string docId, string docName, string selectedAccountTypeName)

@@ -5,8 +5,8 @@ export class BackendClientSingleton {
     private static client: JsonServiceClient;
 
     private static bearerToken: string = "";
-    //private static backendServerUrl:string = "http://localhost:5001"; //UNCOMMENT FOR DEV
-    private static backendServerUrl:string = "http://ec2-63-32-159-120.eu-west-1.compute.amazonaws.com:5001"; //UNCOMMENT FOR DEPLOYMENT
+    private static backendServerUrl:string = "http://localhost:5001"; //UNCOMMENT FOR DEV
+    //private static backendServerUrl:string = "http://ec2-63-32-159-120.eu-west-1.compute.amazonaws.com:5001"; //UNCOMMENT FOR DEPLOYMENT
     private constructor() {
     }
 

@@ -2,7 +2,7 @@
 Date: 2018-01-03 21:44:47
 Version: 4.54
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://ec2-63-32-159-120.eu-west-1.compute.amazonaws.com:5001
+BaseUrl: http://localhost:5001
 
 //GlobalNamespace:
 //MakePropertiesOptional: True

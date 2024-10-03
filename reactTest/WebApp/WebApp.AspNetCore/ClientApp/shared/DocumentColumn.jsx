@@ -88,7 +88,7 @@ export class DocumentColumn extends React.Component {
                 documentToAdd.icon = "";
                 documentToAdd.title = this.state.title;
                 //documentToAdd.owner = this.state.owner ? this.state.owner : "Me";
-                documentToAdd.type = this.state.type ? this.state.type : "Report";
+                documentToAdd.type = this.state.type ? this.state.handleDocTypeChange : "Report";
                 documentToAdd.daysOverdue = this.state.daysOverdue;
                 documentToAdd.documentBase64 = this.state.documentBase64;
                 documentToAdd.status = newStatus;

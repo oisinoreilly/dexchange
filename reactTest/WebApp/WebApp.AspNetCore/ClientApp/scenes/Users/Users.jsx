@@ -114,6 +114,7 @@ class Users extends React.Component {
             showDeleteSelectedModal: false,
             user: new UserAuth(),
             userPrivilege: null,
+            entityType:null,
             userConfig: null,
             validationState: new Map(),
             Password: ""
@@ -201,6 +202,16 @@ class Users extends React.Component {
                         <FormControl.Feedback />
                     </FormGroup>}
                     <FormGroup>
+                        <ControlLabel>Select Entity Type  </ControlLabel>
+                        <Radio onChange={this.handleInputChange} name="entityType" value='Bank' checked={this.state.entityType === 'Bank'} inline>
+                            Standard 
+                        </Radio>
+                        <Radio onChange={this.handleInputChange} name="entityType" value='Corporate' checked={this.state.entityType === 'Corporate'} inline>
+                            Admin
+                        </Radio>
+                    </FormGroup>
+
+                    <FormGroup>
                         <ControlLabel>Select User Type  </ControlLabel>
                         <Radio onChange={this.handleInputChange} name="userPrivilege" value='User' checked={this.state.userPrivilege === 'User'} inline>
                             Standard 
@@ -209,8 +220,8 @@ class Users extends React.Component {
                             Admin
                         </Radio>
                     </FormGroup>
-                    
-                    {this.props.auth.userConfig.UserPrivilege === 'SuperAdmin' && banksAndCorps}
+
+                    {this.props.auth.userConfig.UserPrivilege === 'SuperAdmin' && (this.state.entityType === 'Bank')?banks:corporates}
                 </form>
             </Modal.Body>
             <Modal.Footer>
