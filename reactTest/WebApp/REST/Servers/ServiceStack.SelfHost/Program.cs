@@ -14,6 +14,7 @@ using Core.Contracts;
 using Core.Repositories;
 using MongoDB.Driver;
 using static System.Net.WebRequestMethods;
+using Core.Helpers;
 
 namespace ServiceStack.SelfHost
 {
@@ -103,13 +104,19 @@ namespace ServiceStack.SelfHost
                 //Logging factory, so we can log using commands such as log.Debug("Debug Event Log Entry."); anywhere in the server.
                 //LogManager.LogFactory = new Log4NetFactory(true);
 
+             
                 //Request logging, so we can access SERVER/requestlogs for debugging.
                 Plugins.Add(new RequestLogsFeature { RequiredRoles = new string[] { } });
-                //TODO: Look into how we will whitelist this call from all hosts if required.
-                Plugins.Add(new CorsFeature(
+
+                string corsURL = RegistryHelper.ReadStringValue("CORSUrl", "http://localhost:5173");
+
+                if (0 == RegistryHelper.ReadDWordValue("DisableCORS", 0))
+                {
+                    //TODO: Look into how we will whitelist this call from all hosts if required.
+                    Plugins.Add(new CorsFeature(
                                 allowCredentials: true,
                                 allowedHeaders: "Content-Type, Authorization",
-                                allowOriginWhitelist: new[] 
+                                allowOriginWhitelist: new[]
                                 {
                                     "http://localhost:5000",
                                     "http://localhost:5001",
@@ -122,8 +129,17 @@ namespace ServiceStack.SelfHost
                                     "http://63.32.159.120:5002",
                                     "https://63.32.159.120:5003",
                                     "http://ec2-63-32-159-120.eu-west-1.compute.amazonaws.com:5002",
-                                    "https://ec2-63-32-159-120.eu-west-1.compute.amazonaws.com:5003"
+                                    "https://ec2-63-32-159-120.eu-west-1.compute.amazonaws.com:5003",
+                                    corsURL
                                 }));
+                }
+                else
+                {
+                    Plugins.Add(new CorsFeature(
+                        allowCredentials: false,
+                        allowedHeaders: "Content-Type, Authorization",
+                        allowOriginWhitelist: new[] { "*" }));
+                }
 
                 Plugins.Add(new ServerEventsFeature());
 

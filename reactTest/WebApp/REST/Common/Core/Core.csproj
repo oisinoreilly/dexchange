@@ -49,13 +49,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
-      <HintPath>..\..\..\WebApp.AspNetCore\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
+      <HintPath>..\..\..\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\BouncyCastle.Cryptography.2.4.0\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
     </Reference>
     <Reference Include="DocuSign.eSign, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7fca6fcbbc219ede, processorArchitecture=MSIL">
-      <HintPath>..\..\..\WebApp.AspNetCore\packages\DocuSign.eSign.dll.6.0.0\lib\net452\DocuSign.eSign.dll</HintPath>
+      <HintPath>..\..\..\packages\DocuSign.eSign.dll.6.0.0\lib\net452\DocuSign.eSign.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=5.5.13.4, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\iTextSharp.5.5.13.4\lib\net461\itextsharp.dll</HintPath>
@@ -68,13 +68,13 @@
       <HintPath>..\..\..\packages\Microsoft.IdentityModel.Abstractions.7.5.2\lib\net461\Microsoft.IdentityModel.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Bson, Version=2.4.3.23, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\WebApp.AspNetCore\packages\MongoDB.Bson.2.4.3\lib\net45\MongoDB.Bson.dll</HintPath>
+      <HintPath>..\..\..\packages\MongoDB.Bson.2.4.3\lib\net45\MongoDB.Bson.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Driver, Version=2.4.3.23, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\WebApp.AspNetCore\packages\MongoDB.Driver.2.4.3\lib\net45\MongoDB.Driver.dll</HintPath>
+      <HintPath>..\..\..\packages\MongoDB.Driver.2.4.3\lib\net45\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Driver.Core, Version=2.4.3.23, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\WebApp.AspNetCore\packages\MongoDB.Driver.Core.2.4.3\lib\net45\MongoDB.Driver.Core.dll</HintPath>
+      <HintPath>..\..\..\packages\MongoDB.Driver.Core.2.4.3\lib\net45\MongoDB.Driver.Core.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -146,6 +146,7 @@
   <ItemGroup>
     <Compile Include="Contracts\IDocumentHQRepository.cs" />
     <Compile Include="Contracts\IDocuSignService.cs" />
+    <Compile Include="Helpers\RegistryHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\DocuSignService.cs" />
     <Compile Include="Repositories\MongoDBRepository.cs" />
