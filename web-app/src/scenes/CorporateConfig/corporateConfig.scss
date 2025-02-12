@@ -1,0 +1,16 @@
+﻿
+.corporate-config-container {
+    display: flex;
+    flex: 1;
+    background: white;
+    padding: 13px 46px;
+    overflow: auto;
+
+    .button {
+        margin-bottom: 20px;
+    }
+
+    textarea {
+        min-height: 120px;
+    }
+}

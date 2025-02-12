@@ -1,0 +1,21 @@
+﻿
+
+.pdf-container {
+    position: relative;
+    display: flex;
+    flex: 1;
+
+    .left-absolute {
+        position: absolute;
+        margin: 8px;
+    }
+
+    .icon-container {
+        position: absolute;
+        margin: 60px 8px;
+    }
+
+    .pdf-viewer {
+        flex: 1;
+    }
+}

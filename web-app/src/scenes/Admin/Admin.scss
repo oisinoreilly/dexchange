@@ -1,0 +1,65 @@
+﻿//need to scope css
+.side-nav {
+    flex-basis: 20rem; /*make this generic */
+}
+
+/*move to col component*/
+.admin-column {
+    background-color: #FFFFFF;
+    border-right: 2px solid #b8c8db;
+    display: flex;
+    flex-direction: column;
+
+    a:hover, a:focus {
+        text-decoration: none;
+    }
+
+    h3 {
+        padding-left: 5px;
+        margin: 9px;
+        font-size: 15px;
+        font-family: sans-serif;
+        font-weight: bold;
+        color: #64A0E7;
+    }
+}
+
+.columns {  /* pull this into a column component*/
+    height: calc(100% - 63px);
+    display: flex;
+}
+
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 5px 0;
+    min-height: 50px;
+    color: #4C91E3; //TODO: take colours form global scss
+
+    &.selected {
+        color: #fff;
+        background-color: #4C91E3;
+    }
+}    
+
+.nav-title {
+    margin-left: 8px;
+
+    h4 {
+        margin: 0;
+        font-weight: 600;
+    }
+}
+
+.nav-icon {
+    flex-basis: 32px;
+    margin-left: 18px;
+}
+
+.page-icon {
+    margin: 14px 18px;
+    font-size: 32px;
+    color: #4C91E3;
+}

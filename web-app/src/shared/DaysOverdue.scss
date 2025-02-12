@@ -1,0 +1,16 @@
+﻿.days_overdue {
+    display: flex;
+    flex-direction: column;
+    font-size: .9em;
+    align-items: center;
+    line-height: 0.9em;
+
+    //TODO: move this to common scss folder with system colours
+    .red {
+        color: #d9534f;
+    }
+
+    .amber {
+        color: #f0ad4e;
+    }
+}

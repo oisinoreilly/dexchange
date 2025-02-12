@@ -1,0 +1,13 @@
+﻿.groups {
+    flex: 1;    
+}
+
+//for roles + user list in groups
+.list-container {
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+

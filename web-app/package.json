@@ -7,11 +7,18 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "patch-package"
   },
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "bootstrap": "3.3.6",
+    "eventsource-polyfill": "^0.9.6",
+    "font-awesome": "^4.7.0",
+    "jquery": "^2.2.1",
+    "react": "^15.3.2",
+    "react-bootstrap": "^0.30.8",
+    "react-checkbox-tree": "^1.0.2",
+    "react-dom": "^15.3.2",
     "react-event-timeline": "^1.2.4",
     "react-pdf-js": "^3.0.4",
     "react-redux": "^4.4.5",
@@ -21,10 +28,11 @@
     "redux-persist": "^4.9.1",
     "redux-thunk": "^2.2.0",
     "seamless-immutable": "^7.1.2",
-    "font-awesome": "^4.7.0"
+    "servicestack-client": "0.0.42"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
+    "@rollup/plugin-inject": "^5.0.5",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",
@@ -32,6 +40,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.18",
     "globals": "^15.14.0",
+    "sass": "^1.84.0",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.22.0",
     "vite": "^6.1.0"

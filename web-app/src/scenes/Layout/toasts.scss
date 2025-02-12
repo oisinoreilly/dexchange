@@ -1,0 +1,50 @@
+﻿.toast-container {
+    position: fixed;
+    top: 104px;
+    right: 50%;
+    min-width: 200px;
+    transform: translateX(50%);
+
+    .alert {
+        margin-bottom: 5px;
+    }
+
+    .animated-alert {
+        animation: slide 3s ease-in forwards;
+    }
+
+    @keyframes slide {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+
+        20% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        90% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        to {
+            opacity: 0;
+            transform: translateY(-30px);
+            display: none;
+        }
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-20px);
+            opacity: 0
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}

@@ -1,0 +1,33 @@
+diff --git a/node_modules/servicestack-client/src/index.js b/node_modules/servicestack-client/src/index.js
+index d023753..4ea8ecf 100644
+--- a/node_modules/servicestack-client/src/index.js
++++ b/node_modules/servicestack-client/src/index.js
+@@ -643,9 +643,9 @@ var JsonServiceClient = /** @class */ (function () {
+             headers: this.headers,
+             compress: false
+         };
+-        var req = new Request(url, reqOptions);
+         if (HttpMethods.hasRequestBody(method))
+-            req.body = body || JSON.stringify(request);
++            reqOptions.body = body || JSON.stringify(request);
++        var req = new Request(url, reqOptions);
+         var opt = { url: url };
+         if (this.requestFilter != null)
+             this.requestFilter(req, opt);
+diff --git a/node_modules/servicestack-client/src/index.ts b/node_modules/servicestack-client/src/index.ts
+index cc89568..cd94ac8 100644
+--- a/node_modules/servicestack-client/src/index.ts
++++ b/node_modules/servicestack-client/src/index.ts
+@@ -846,10 +846,9 @@ export class JsonServiceClient {
+             headers: this.headers,
+             compress: false
+         };
+-        const req = new Request(url, reqOptions);
+-
+         if (HttpMethods.hasRequestBody(method))
+-            (req as any).body = body || JSON.stringify(request);
++            (reqOptions as any).body = body || JSON.stringify(request);
++        const req = new Request(url, reqOptions);
+ 
+         var opt:IRequestFilterOptions = { url };
+         if (this.requestFilter != null)

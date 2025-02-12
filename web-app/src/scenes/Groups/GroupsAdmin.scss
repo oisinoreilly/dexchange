@@ -1,0 +1,15 @@
+﻿.groups-admin {
+    display: flex;
+    flex: 1;
+
+    .group-container {
+        flex: 1;
+        display: flex;
+    }
+
+    .details-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+}
